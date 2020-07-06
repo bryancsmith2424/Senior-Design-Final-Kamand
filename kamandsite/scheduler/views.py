@@ -4,4 +4,7 @@ from django.http import HttpResponse
 
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the scheduler index.")
+    return render(request, 'scheduler/index.html')
+
+def start(request):
+    return render(request, 'scheduler/start.html')

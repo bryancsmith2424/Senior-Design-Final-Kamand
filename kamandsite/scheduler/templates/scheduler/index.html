@@ -4,9 +4,10 @@
     <title>Google Registration</title>
   </head>
   <body>
-  <h1>My Google Login Project</h1>
+  <h2>My Google Login Project</h2>
   {% if user.is_authenticated %}
   <p>Welcome, {{ user.username }} !</p>
+  <a href="{% url 'start' %}"> Click here to start Kamanding your life!</a>
 
   {% else %}
   <h1>My Google Login Project</h1>
