@@ -1,0 +1,14 @@
+<h1>Please answer the following questions so we can tailor or scheduleing algorithim to you</h1>
+
+<h2>First up, what classes are you taking this semester?</h2>
+
+<form action="{% url 'update_goals' user_id %}" method="post">
+{% csrf_token %}
+
+{% for i in '1234567'|make_list %}
+  <label for="class{{ i }}">Class {{forloop.counter}}:</label>
+  <input type="text" name="class" id="class{{ i }}"><br>
+{% endfor %}
+
+<input type="submit" value="Submit">
+</form>
