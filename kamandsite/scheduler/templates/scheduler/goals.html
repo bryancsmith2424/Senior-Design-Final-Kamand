@@ -2,7 +2,7 @@
 
 <h2>First up, what classes are you taking this semester?</h2>
 
-<form action="{% url 'update_goals' user_id %}" method="post">
+<form action="{% url 'update_goals' %}" method="post">
 {% csrf_token %}
 
 {% for i in '1234567'|make_list %}

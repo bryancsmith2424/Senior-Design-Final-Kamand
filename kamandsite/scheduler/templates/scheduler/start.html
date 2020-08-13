@@ -1,6 +1,11 @@
 <html>
 <head>
 Hello {{user}} you've logged in!
-<a href="{% url "goals" user.id %}"> Click here to set your goals!</a>
+{% if course_name_count > 0 %}
+<a href="{% url "assignments" %}"> Click here to input your assignments to be schedueded </a>
+
+{% else %}
+<a href="{% url "goals" %}"> Click here to input the courses you will be taking this semester!</a>
+{% endif %}
 </head>
 </html>

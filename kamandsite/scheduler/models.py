@@ -27,6 +27,31 @@ class Profile(models.Model):
     class7 = models.CharField(max_length=50, blank=True)
     class8 = models.CharField(max_length=50, blank=True)
 
+class Course(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    coursename = models.CharField(max_length=50, blank=True)
+
+class Assignment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+
+    Homework = 'HW'
+    Project = 'Pr'
+    Exam = 'Ex'
+    Assignment_Type_Choices = [
+        (Homework, 'Homework'),
+        (Project, 'Project'),
+        (Exam, 'Exam'),
+    ]
+    assignment_type = models.CharField(
+        max_length=2,
+        choices=Assignment_Type_Choices,
+        default=Homework,
+    )
+
+    assignment_name = models.CharField(max_length=25, blank=True)
+    deadline = models.DateTimeField()
+    time_to_complete_estimate = models.DurationField()
 
 
 @receiver(post_save, sender=User)
@@ -40,3 +65,11 @@ def save_user_profile(sender, instance, **kwargs):
         instance.profile.save()
     except Profile.DoesNotExist:
             pass
+'''
+@receiver(post_save, sender=User)
+def save_user_course(sender, instance, **kwargs):
+    try:
+        instance.course.save()
+    except Profile.DoesNotExist or AttributeError:
+            pass
+'''
