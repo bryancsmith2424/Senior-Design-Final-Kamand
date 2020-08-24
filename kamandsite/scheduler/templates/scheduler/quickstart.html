@@ -13,6 +13,21 @@
 
     <pre id="content" style="white-space: pre-wrap;"></pre>
 
+    <form action="{% url 'create_schedule' %}" method="post">
+    {% csrf_token %}
+    <b>Please wait until your data is imported from google, then hit submit</b><br>
+    <input type="submit" value="Submit"><hr>
+    {% for i in range %}
+      <label for="event{{i}}">Event {{forloop.counter}}:</label>
+      <input type="text" name="event_summary{{i}}" id="event_summary{{i}}">
+      <input type="text" name="event_start{{i}}" id="event_start{{i}}">
+      <input type="text" name="event_end{{i}}" id="event_end{{i}}">
+      <br>
+    {% endfor %}
+
+
+    </form>
+
     <script type="text/javascript">
       // Client ID and API key from the Developer Console
       var CLIENT_ID = '29584448923-s66kvmo2fbtaujbp28oa4km9e03clc4v.apps.googleusercontent.com';
@@ -23,7 +38,7 @@
 
       // Authorization scopes required by the API; multiple scopes can be
       // included, separated by spaces.
-      var SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
+      var SCOPES = "https://www.googleapis.com/auth/calendar";
 
       var authorizeButton = document.getElementById('authorize_button');
       var signoutButton = document.getElementById('signout_button');
@@ -51,6 +66,7 @@
 
           // Handle the initial sign-in state.
           updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+          document.addEventListener("DOMContentLoaded", ready);
           authorizeButton.onclick = handleAuthClick;
           signoutButton.onclick = handleSignoutClick;
         }, function(error) {
@@ -66,7 +82,10 @@
         if (isSignedIn) {
           authorizeButton.style.display = 'none';
           signoutButton.style.display = 'block';
+          window.addEventListener("DOMContentLoaded", getUpcomingEvents());
+          //getUpcomingEvents();
           listUpcomingEvents();
+
         } else {
           authorizeButton.style.display = 'block';
           signoutButton.style.display = 'none';
@@ -104,31 +123,71 @@
        * the authorized user's calendar. If no events are found an
        * appropriate message is printed.
        */
-      function listUpcomingEvents() {
+      function getUpcomingEvents() {
+        appendPre('we are in the getUpcomingEvents function');
+        var endDate = new Date();
+        var numberOfDaysToAdd = 14;
+        endDate.setDate(endDate.getDate() + numberOfDaysToAdd);
         gapi.client.calendar.events.list({
           'calendarId': 'primary',
           'timeMin': (new Date()).toISOString(),
+          'timeMax': endDate.toISOString(),
           'showDeleted': false,
           'singleEvents': true,
-          'maxResults': 10,
           'orderBy': 'startTime'
         }).then(function(response) {
           var events = response.result.items;
-          appendPre('Upcoming events:');
-
+          var length = events.length;
           if (events.length > 0) {
             for (i = 0; i < events.length; i++) {
               var event = events[i];
-              var when = event.start.dateTime;
+              var start = event.start.dateTime;
+              var end = event.end.dateTime;
+              //need to see if this is a nessacary edge case
+              /*
               if (!when) {
                 when = event.start.date;
               }
-              appendPre(event.summary + ' (' + when + ')')
+              */
+              var event_summary = document.getElementById("event_summary".concat(i));
+              if(event_summary == null){
+                appendPre("Couldn't find");
+              }
+              event_summary.value = event.summary;
+              //document.getElementById("event_summary".concat(i.toString())).value = event.summary;
+              document.getElementById("event_start".concat(i.toString())).value = start;
+              document.getElementById("event_end".concat(i.toString())).value = end;
+
             }
-          } else {
-            appendPre('No upcoming events found.');
           }
-        });
+        })
+      }
+
+      function listUpcomingEvents() {
+      gapi.client.calendar.events.list({
+        'calendarId': 'primary',
+        'timeMin': (new Date()).toISOString(),
+        'showDeleted': false,
+        'singleEvents': true,
+        'maxResults': 10,
+        'orderBy': 'startTime'
+      }).then(function(response) {
+        var events = response.result.items;
+        appendPre('Upcoming events:');
+
+        if (events.length > 0) {
+          for (i = 0; i < events.length; i++) {
+            var event = events[i];
+            var when = event.start.dateTime;
+            if (!when) {
+              when = event.start.date;
+            }
+            appendPre(event.summary + ' (' + when + ')')
+          }
+        } else {
+          appendPre('No upcoming events found.');
+        }
+      });
       }
 
     </script>
@@ -137,5 +196,9 @@
       onload="this.onload=function(){};handleClientLoad()"
       onreadystatechange="if (this.readyState === 'complete') this.onload()">
     </script>
-  </body>
+
+
+
+</body>
+
 </html>

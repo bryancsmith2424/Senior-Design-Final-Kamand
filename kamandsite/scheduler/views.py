@@ -79,3 +79,11 @@ def update_assignments(request):
         except(KeyError):
             pass
     return HttpResponseRedirect(reverse('scheduler'))
+
+def get_calendar_data(request):
+    context = {'range': range(50)}
+    return render(request, 'scheduler/quickstart.html', context)
+
+def create_schedule(request):
+    context = request.POST
+    return render(request, 'scheduler/test', context)
