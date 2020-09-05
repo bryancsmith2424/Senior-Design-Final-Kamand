@@ -1,6 +1,11 @@
-<h1>Please answer the following questions so we can tailor or scheduleing algorithim to you</h1>
+{% load static %}
 
-<h2>First up, what classes are you taking this semester?</h2>
+<link rel="stylesheet" type="text/css" href="{% static 'scheduler/style.css' %}">
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
+
+<h2>Please answer the following questions so we can tailor or scheduleing algorithim to you</h2>
+
+<p>First up, what classes are you taking this semester?</p>
 
 <form action="{% url 'update_goals' %}" method="post">
 {% csrf_token %}

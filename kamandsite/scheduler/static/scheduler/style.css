@@ -1,0 +1,29 @@
+body {
+  background-color: coral;
+}
+
+h1 {
+  color: khaki;
+  text-align: center;
+  font-family: Oswald;
+  font-size: 96px;
+}
+
+h2 {
+  text-align: center;
+  font-family: Oswald;
+  font-size: 48px;
+}
+
+p {
+  font-family: Oswald;
+  font-size: 24px;
+}
+
+a {
+  font-family: Oswald;
+  font-size: 48px;
+}
+.center {
+  text-align: center;
+}

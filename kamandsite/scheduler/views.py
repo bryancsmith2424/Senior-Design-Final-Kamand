@@ -85,5 +85,28 @@ def get_calendar_data(request):
     return render(request, 'scheduler/quickstart.html', context)
 
 def create_schedule(request):
-    context = request.POST
-    return render(request, 'scheduler/test', context)
+    #context = request.POST
+    context = {
+    'eventList': [{
+     'summary': 'Kamand Test event',
+     'location': 'Busch?',
+     'description': 'enetering an event via javascript',
+     'start': {
+       'dateTime': '2020-09-10T18:00:00',
+       'timeZone': 'America/New_York',
+     },
+     'end': {
+       'dateTime': '2020-09-10T19:00:00',
+       'timeZone': 'America/New_York',
+     },
+     'attendees': [
+       {'email': 'mpardonner@gmail.com'},
+       {'email': 'enilnoswerdna@gmail.com'}
+     ],
+     'reminders': {
+       'useDefault': True,
+       },
+    },]
+    }
+
+    return render(request, 'scheduler/create_schedule.html', context)

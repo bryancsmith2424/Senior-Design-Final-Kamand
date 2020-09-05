@@ -1,18 +1,24 @@
 {% load socialaccount %}
+
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'scheduler/style.css' %}">
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
 <html>
   <head>
     <title>Google Registration</title>
   </head>
   <body>
-  <h2>My Google Login Project</h2>
+    <div class="center">
+  <h1>Kamand</h1>
   {% if user.is_authenticated %}
-  <p>Welcome, {{ user.username }} !</p>
+  <h2>Welcome, {{ user.username }} !</h2>
   <a href="{% url 'start' %}"> Click here to start Kamanding your life!</a>
 
   {% else %}
-  <h1>My Google Login Project</h1>
   <a href="{% provider_login_url 'google' %}">Login with Google</a>
   {% endif %}
-
+  <br>
+</div>
   </body>
 </html>

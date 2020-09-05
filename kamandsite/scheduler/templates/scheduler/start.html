@@ -1,6 +1,10 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'scheduler/style.css' %}">
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
 <html>
 <head>
-Hello {{user}} you've logged in!
+<h2>Hello {{user}} you've logged in! </h2>
 {% if course_name_count > 0 %}
 <a href="{% url "assignments" %}"> Click here to input your assignments to be schedueded </a>
 

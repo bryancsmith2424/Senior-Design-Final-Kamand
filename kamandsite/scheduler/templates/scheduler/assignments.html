@@ -1,3 +1,8 @@
+
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'scheduler/style.css' %}">
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
 <h1>Please tell us what assignments you have coming up so we can build your schedule </h1>
 
 <form action="{% url 'update_assignments' %}" method="post">
