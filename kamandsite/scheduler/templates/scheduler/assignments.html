@@ -10,7 +10,8 @@
 
 {% for i in '123456789'|make_list %}
   <p>
-  <label for="course{{ i }}">Assignment {{forloop.counter}}:</label>
+  <p>Assignment {{forloop.counter}}:</p>
+  <label for="course{{ i }}">What class is this for?:</label>
   <select id="course{{ i }}" name="course{{ i }}">
     {% for course in course_name_list %}
     <option value="{{ course.id }}">{{ course.coursename }}</option>

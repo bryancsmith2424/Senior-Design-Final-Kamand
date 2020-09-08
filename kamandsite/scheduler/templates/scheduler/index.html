@@ -12,7 +12,7 @@
     <div class="center">
   <h1>Kamand</h1>
   {% if user.is_authenticated %}
-  <h2>Welcome, {{ user.username }} !</h2>
+  <h2>Welcome, {{ user.first_name }} !</h2>
   <a href="{% url 'start' %}"> Click here to start Kamanding your life!</a>
 
   {% else %}

@@ -36,18 +36,7 @@ def update_goals(request):
         for course in class_name_list:
             if course != '':
                 Course.objects.create(user=user, coursename=course)
-
-        '''
-        user.profile.class1 = class_name_list[0]
-        user.profile.class2 = class_name_list[1]
-        user.profile.class3 = class_name_list[2]
-        user.profile.class4 = class_name_list[3]
-        user.profile.class5 = class_name_list[4]
-        user.profile.class6 = class_name_list[5]
-        user.profile.class7 = class_name_list[6]
-        '''
-
-
+        
         #context = {'user': user, 'user_id': user_id}
         return HttpResponseRedirect(reverse('scheduler'))
 
