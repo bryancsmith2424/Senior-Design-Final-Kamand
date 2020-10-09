@@ -8,8 +8,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
-from googleapiclient.discovery import build
-
 from scheduler.modules.GreedyAlgo import greedyAlgo
 from scheduler.modules.OptimalEvent import OptimalEvent
 from scheduler.modules.Event import Event
