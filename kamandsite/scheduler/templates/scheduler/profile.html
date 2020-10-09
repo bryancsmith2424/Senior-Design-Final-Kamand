@@ -1,0 +1,28 @@
+
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'scheduler/style.css' %}">
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
+
+<h1>Profile</h1>
+
+<h2>
+Courses:
+</h2>
+
+<ul>
+{% for course in course_name_list %}
+<li>{{course.coursename}}</li>
+{% endfor %}
+</ul>
+<p>If you need to edit your courses, please click <a href ="{% url 'edit_courses' %}">here</a></p>
+
+<h2>
+Assignments:
+</h2>
+<ul>
+{% for assignment in assignment_list %}
+<li>{{assignment.assignment_name}} <em>Deadline: {{assignment.deadline}}</em></li>
+{% endfor %}
+</ul>
+<p>If you need to edit your assignments, please click <a href ="{% url 'edit_assignments' %}">here</a></p>

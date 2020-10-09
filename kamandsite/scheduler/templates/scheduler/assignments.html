@@ -29,9 +29,9 @@
   <input type="text" name="name{{ i }}" id="name{{ i }}"><br>
 
   <label for="deadline{{ i }}">When is it due?: </label>
-  <input type="datetime-local" name="deadline{{ i }}" id="deadline{{ i }}"><br>
+  <input type="datetime-local" name="deadline{{ i }}" id="deadline{{ i }}" step=900><br>
 
-  <label for="duration{{ i }}">About how many hours do you expect to need to complete this assignment? </label>
+  <label for="duration{{ i }}">About how many hours do you expect to need to complete/study for this assignment? </label>
   <input type="number" name="duration{{ i }}" id="duration{{ i }}" step=0.25><br>
   </p>
 {% endfor %}

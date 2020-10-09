@@ -15,6 +15,12 @@ h2 {
   font-size: 48px;
 }
 
+h3{
+  text-align: left;
+  font-family: Oswald;
+  font-size: 48px;
+}
+
 p {
   font-family: Oswald;
   font-size: 24px;
@@ -26,4 +32,9 @@ a {
 }
 .center {
   text-align: center;
+}
+
+ul {
+  font-family: Oswald;
+  font-size: 24px;
 }

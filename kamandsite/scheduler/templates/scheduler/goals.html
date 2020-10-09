@@ -15,5 +15,28 @@
   <input type="text" name="class" id="class{{ i }}"><br>
 {% endfor %}
 
+<label for="start_time">When is the earliest we should schedule something for you?</label>
+<input type="time" name="start_time" id="start_time" step=900><br>
+
+<label for="end_time">When is the latest we should schedule something for you?</label>
+<input type="time" name="end_time" id="end_time" step=900><br>
+
+<p>When do you think you are most productive?</p>
+<input type="radio" id="EB" name="productive_time" value="EB">
+<label for="EB">5am - 8am <em>Early Bird</em></label>
+<input type="radio" id="MM" name="productive_time" value="MM">
+<label for="MM">8am - 11am <em>Morning Magpie</em></label>
+<input type="radio" id="MD" name="productive_time" value="MD">
+<label for="MD">11am - 2pm <em>Mid-Day Macaw</em></label>
+<input type="radio" id="AA" name="productive_time" value="AA">
+<label for="AA">2pm - 5pm <em>Afternoon Albatross</em></label>
+<input type="radio" id="EE" name="productive_time" value="EE">
+<label for="EE">5pm - 8pm <em>Evening Eagle</em></label>
+<input type="radio" id="NO" name="productive_time" value="NO">
+<label for="NO">8pm - 10pm <em>Night Owl</em></label>
+<input type="radio" id="NN" name="productive_time" value="NN">
+<label for="NN">11pm - 2am <em>Noctuenal Nightingale</em></label><br>
+
+
 <input type="submit" value="Submit">
 </form>

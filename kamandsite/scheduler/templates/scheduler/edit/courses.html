@@ -1,0 +1,15 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'scheduler/style.css' %}">
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
+
+<form action="{% url 'delete_courses' %}" method="post">
+
+{% csrf_token %}
+<h2>Check off which courses you would like to delete:</h2>
+{% for course in course_list %}
+<input type=checkbox id='course{{forloop.counter}}' name='course{{forloop.counter}}' value='{{course.id}}'>
+<label for='course{{forloop.counter}}'>{{course.coursename}}<br>
+{% endfor %}
+<input type="submit" value="Delete">
+</form>

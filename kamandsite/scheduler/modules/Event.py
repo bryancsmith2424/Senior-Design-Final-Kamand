@@ -19,7 +19,7 @@ class Event:
         '''
 
     def __repr__(self):
-        return self.dict['summary']
+        return self.id
 
 
     def createDict(self):

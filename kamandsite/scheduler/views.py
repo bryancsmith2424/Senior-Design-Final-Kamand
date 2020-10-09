@@ -6,10 +6,15 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, time, date
 
 from .models import Profile, Course, Assignment
 
+from scheduler.modules.GreedyAlgo import greedyAlgo
+from scheduler.modules.OptimalEvent import OptimalEvent
+from scheduler.modules.Event import Event
+from scheduler.modules.FindAvailableTime import findAvailableTime
+from scheduler.modules.CreateOptimalEvents import createOptimalEvents
 
 def index(request):
     return render(request, 'scheduler/index.html')
@@ -30,13 +35,20 @@ def update_goals(request):
     user = request.user
     try:
         class_name_list = request.POST.getlist('class')
+        start_time = time.fromisoformat(request.POST.get('start_time'))
+        end_time = time.fromisoformat(request.POST.get('end_time'))
+        productive_time = request.POST.get('productive_time')
     except(KeyError):
         return render(request, 'scheduler/error.html')
     else:
+        user.profile.productive_time = productive_time
+        user.profile.day_start_offset = int(start_time.hour - 9) + 1
+        user.profile.day_end_offset = int(end_time.hour - 22)
+        user.save()
         for course in class_name_list:
             if course != '':
                 Course.objects.create(user=user, coursename=course)
-        
+
         #context = {'user': user, 'user_id': user_id}
         return HttpResponseRedirect(reverse('scheduler'))
 
@@ -69,12 +81,62 @@ def update_assignments(request):
             pass
     return HttpResponseRedirect(reverse('scheduler'))
 
-def get_calendar_data(request):
-    context = {'range': range(50)}
-    return render(request, 'scheduler/quickstart.html', context)
+@login_required(login_url='/scheduler/')
+def profile(request):
+    today = datetime.today()
+    context = {
+        'course_name_list': request.user.course_set.all(),
+        'course_name_count': request.user.course_set.count(),
+        'assignment_list': request.user.assignment_set.filter(deadline__gte=today).order_by('deadline'),
+    }
+    return render(request, 'scheduler/profile.html', context)
 
+@login_required(login_url='/scheduler/')
+def edit_courses(request):
+    today = datetime.today()
+    context = {'course_list': request.user.course_set.all(),}
+    return render(request, 'scheduler/edit/courses.html', context)
+
+@login_required(login_url='/scheduler/')
+def delete_courses(request):
+    user = request.user
+    form_dict = request.POST.copy()
+    del form_dict['csrfmiddlewaretoken']
+    for course_id in form_dict.values():
+        try:
+            user.course_set.filter(id=course_id).delete()
+        except(KeyError):
+            pass
+    return HttpResponseRedirect(reverse('scheduler'))
+
+@login_required(login_url='/scheduler/')
+def edit_assignments(request):
+    today = datetime.today()
+    context = {'assignment_list': request.user.assignment_set.filter(deadline__gte=today).order_by('deadline'),}
+    return render(request, 'scheduler/edit/assignments.html', context)
+
+@login_required(login_url='/scheduler/')
+def delete_assignments(request):
+    user = request.user
+    form_dict = request.POST.copy()
+    del form_dict['csrfmiddlewaretoken']
+    for assignment_id in form_dict.values():
+        try:
+            user.assignment_set.filter(id=assignment_id).delete()
+        except(KeyError):
+            pass
+    return HttpResponseRedirect(reverse('scheduler'))
+
+
+@login_required(login_url='/scheduler/')
+def get_calendar_data(request):
+    context = {'range': range(100)}
+    return render(request, 'scheduler/get_schedule.html', context)
+
+@login_required(login_url='/scheduler/')
 def create_schedule(request):
-    #context = request.POST
+    user = request.user
+    '''
     context = {
     'eventList': [{
      'summary': 'Kamand Test event',
@@ -97,5 +159,26 @@ def create_schedule(request):
        },
     },]
     }
+    '''
+    form_dict = request.POST.copy()
+    del form_dict['csrfmiddlewaretoken']
+    event_dict_list = {'items': []}
+    for i in range(100):
+        if (len(form_dict.get('event_start{}'.format(i))) > 1):
+            event_start = datetime.fromisoformat(form_dict.get('event_start{}'.format(i)))
+            event_end = datetime.fromisoformat(form_dict.get('event_end{}'.format(i)))
+            event = Event(event_start, event_end, "N/A", "N/A")
+            event_dict = event.createDict()
+            event_dict_list['items'].append(event_dict)
+    avalible_times = findAvailableTime(event_dict_list, date.today() + timedelta(days = 1), date.today() + timedelta(days = 15), user.profile.day_start_offset, user.profile.day_end_offset, -4)
+    assignment_list = user.assignment_set.filter(deadline__gte=date.today()).filter(deadline__lte=date.today()+timedelta(days=14)).order_by('deadline')
+    events_to_add = createOptimalEvents(assignment_list, user.profile.productive_time)
+    event_schedule = greedyAlgo(avalible_times, events_to_add)
+    event_dict_list = []
+    for event in event_schedule:
+        event_dict = event.createDict()
+        event_dict_list.append(event_dict)
+    context = {'eventList': event_dict_list}
+
 
     return render(request, 'scheduler/create_schedule.html', context)

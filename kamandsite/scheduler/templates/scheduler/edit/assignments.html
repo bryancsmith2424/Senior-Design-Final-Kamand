@@ -1,0 +1,15 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'scheduler/style.css' %}">
+<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
+
+<form action="{% url 'delete_assignments' %}" method="post">
+
+{% csrf_token %}
+<h2>Check off which assignments you would like to delete:</h2>
+{% for assignment in assignment_list %}
+<input type=checkbox id='assignment{{forloop.counter}}' name='assignment{{forloop.counter}}' value='{{assignment.id}}'>
+<label for='assignment{{forloop.counter}}'>{{assignment.assignment_name}} <em>Deadline: {{assignment.deadline}}</em><br>
+{% endfor %}
+<input type="submit" value="Delete">
+</form>
