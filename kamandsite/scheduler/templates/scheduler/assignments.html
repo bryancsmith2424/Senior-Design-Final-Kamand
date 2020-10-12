@@ -21,8 +21,8 @@
   <label for="type{{ i }}"> What type of assignment is this? </label>
   <select id="type{{ i }}" name="type{{ i }}">
     <option value="HW">Homework</option>
-    <option value="Pr">Project</option>
-    <option value="Ex">Exam</option>
+    <option value="QZ">Quiz</option>
+    <option value="EX">Exam</option>
   </select><br>
 
   <label for="name{{ i }}">Assignment Name: </label>
@@ -32,9 +32,27 @@
   <input type="datetime-local" name="deadline{{ i }}" id="deadline{{ i }}" step=900><br>
 
   <label for="duration{{ i }}">About how many hours do you expect to need to complete/study for this assignment? </label>
-  <input type="number" name="duration{{ i }}" id="duration{{ i }}" step=0.25><br>
+  <input type="number" name="duration{{ i }}" id="duration{{ i }}" step=0.25 min=0><br>
   </p>
 {% endfor %}
 
 <input type="submit" value="Submit">
 </form>
+
+{% if user.is_authenticated %}
+<a href="#" onClick="document.getElementById('logoutform').submit()"><button type="button" style="position: absolute;left: 25px;top: 125px;
+background-color: #DDA0DD;
+border: none;
+color: white;
+padding: 15px 32px;
+text-align: center;
+text-decoration: none;
+display: inline-block;
+font-size: 20px;
+margin: 4px 2px;
+cursor: pointer;">Logout</button></a>
+<form id="logoutform" method="POST" action="{% url 'logout' %}">
+{% csrf_token %}
+<input type="hidden">
+</form>
+{% endif %}

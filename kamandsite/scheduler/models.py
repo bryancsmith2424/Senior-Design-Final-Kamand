@@ -39,6 +39,7 @@ class Profile(models.Model):
     )
     day_start_offset = models.IntegerField(default=0)
     day_end_offset = models.IntegerField(default=0)
+    timezone = models.CharField(max_length=50, default='EST')
 
 
 class Course(models.Model):
@@ -62,11 +63,11 @@ class Assignment(models.Model):
         choices=Assignment_Type_Choices,
         default=Homework,
     )
-
     assignment_name = models.CharField(max_length=25, blank=True)
     deadline = models.DateTimeField()
     #time_to_complete_estimate is in hours
     time_to_complete_estimate = models.FloatField(default = 1.0)
+    scheduled = models.BooleanField(default=False)
 
 
 @receiver(post_save, sender=User)

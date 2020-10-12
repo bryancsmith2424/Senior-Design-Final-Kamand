@@ -4,7 +4,8 @@
 <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
 
 <h2>Please answer the following questions so we can tailor or scheduleing algorithim to you</h2>
-
+<br>
+<br>
 <p>First up, what classes are you taking this semester?</p>
 
 <form action="{% url 'update_goals' %}" method="post">
@@ -35,8 +36,26 @@
 <input type="radio" id="NO" name="productive_time" value="NO">
 <label for="NO">8pm - 10pm <em>Night Owl</em></label>
 <input type="radio" id="NN" name="productive_time" value="NN">
-<label for="NN">11pm - 2am <em>Noctuenal Nightingale</em></label><br>
+<label for="NN">11pm - 2am <em>Nocturnal Nightingale</em></label><br>
 
 
 <input type="submit" value="Submit">
 </form>
+
+{% if user.is_authenticated %}
+<a href="#" onClick="document.getElementById('logoutform').submit()"><button type="button" style="position: absolute;left: 10px;top: 75px;
+background-color: #DDA0DD;
+border: none;
+color: white;
+padding: 15px 32px;
+text-align: center;
+text-decoration: none;
+display: inline-block;
+font-size: 20px;
+margin: 4px 2px;
+cursor: pointer;">Logout</button></a>
+<form id="logoutform" method="POST" action="{% url 'logout' %}">
+{% csrf_token %}
+<input type="hidden">
+</form>
+{% endif %}

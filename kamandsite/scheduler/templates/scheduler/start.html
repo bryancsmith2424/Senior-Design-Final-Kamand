@@ -5,11 +5,29 @@
 <html>
 <head>
 <h2>Hello {{user}} you've logged in! </h2>
-{% if course_name_count > 0 %}
-<a href="{% url "assignments" %}"> Click here to input your assignments to be schedueded </a>
+<a href="{% url "assignments" %}"> Click here to input your assignments to be schedueded </a><br><hr>
 
-{% else %}
-<a href="{% url "goals" %}"> Click here to give us some info about your semester!</a>
-{% endif %}
+<a href="{% url "importcalander" %}">Click here for us to schedule when to do your assignments!</a>
+
+<br><hr>
+<a href="{% url "profile" %}"> View Profile </a>
+
 </head>
+{% if user.is_authenticated %}
+<a href="#" onClick="document.getElementById('logoutform').submit()"><button type="button" style="position: absolute;left: 100px;top: 50px;
+background-color: #DDA0DD;
+border: none;
+color: white;
+padding: 15px 32px;
+text-align: center;
+text-decoration: none;
+display: inline-block;
+font-size: 20px;
+margin: 4px 2px;
+cursor: pointer;">Logout</button></a>
+<form id="logoutform" method="POST" action="{% url 'logout' %}">
+{% csrf_token %}
+<input type="hidden">
+</form>
+{% endif %}
 </html>

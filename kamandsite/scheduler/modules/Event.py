@@ -19,20 +19,20 @@ class Event:
         '''
 
     def __repr__(self):
-        return self.id
+        return "{}:{} to {}".format(self.id, self.startTime, self.endTime)
 
 
     def createDict(self):
         eventDict = {
          'summary': '{}'.format(self.id),
-         'description': 'We can make this part some tips/tricks based on the type (ex. Finding a good place to study...)',
+         'description': '',
          'start': {
            'dateTime': self.startTime.isoformat(),
-           'timeZone': 'America/New_York',
+           'timeZone': self.startTime.tzname(),
          },
          'end': {
            'dateTime': self.endTime.isoformat(),
-           'timeZone': 'America/New_York',
+           'timeZone': self.endTime.tzname(),
          },
          'reminders': {
            'useDefault': False,

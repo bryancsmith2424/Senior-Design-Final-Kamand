@@ -5,8 +5,11 @@ from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import  authenticate, login, logout
 
-from datetime import timedelta, datetime, time, date
+from datetime import timedelta, datetime, time, date, tzinfo
+
+from pytz import timezone
 
 from .models import Profile, Course, Assignment
 
@@ -18,6 +21,12 @@ from scheduler.modules.CreateOptimalEvents import createOptimalEvents
 
 def index(request):
     return render(request, 'scheduler/index.html')
+
+def pagelogout(request):
+    if request.method == "POST":
+        logout(request)
+
+        return HttpResponseRedirect(reverse('scheduler'))
 
 @login_required(login_url='/scheduler/')
 def start(request):
@@ -74,8 +83,9 @@ def update_assignments(request):
             if (name == '') or (deadline == '') or (duration == ''):
                 pass
             else:
-                deadline = datetime.fromisoformat(deadline)
-                duration = timedelta(hours = float(duration))
+                user_timezone = timezone(user.profile.timezone)
+                deadline = user_timezone.localize(datetime.fromisoformat(deadline))
+                duration = float(duration)
                 Assignment.objects.create(user=user, course=Course.objects.get(pk=course), assignment_type=type, assignment_name=name, deadline=deadline, time_to_complete_estimate=duration)
         except(KeyError):
             pass
@@ -107,7 +117,7 @@ def delete_courses(request):
             user.course_set.filter(id=course_id).delete()
         except(KeyError):
             pass
-    return HttpResponseRedirect(reverse('scheduler'))
+    return HttpResponseRedirect(reverse('scheduler/start'))
 
 @login_required(login_url='/scheduler/')
 def edit_assignments(request):
@@ -125,7 +135,7 @@ def delete_assignments(request):
             user.assignment_set.filter(id=assignment_id).delete()
         except(KeyError):
             pass
-    return HttpResponseRedirect(reverse('scheduler'))
+    return HttpResponseRedirect(reverse('scheduler/start'))
 
 
 @login_required(login_url='/scheduler/')
@@ -171,14 +181,19 @@ def create_schedule(request):
             event_dict = event.createDict()
             event_dict_list['items'].append(event_dict)
     avalible_times = findAvailableTime(event_dict_list, date.today() + timedelta(days = 1), date.today() + timedelta(days = 15), user.profile.day_start_offset, user.profile.day_end_offset, -4)
-    assignment_list = user.assignment_set.filter(deadline__gte=date.today()).filter(deadline__lte=date.today()+timedelta(days=14)).order_by('deadline')
-    events_to_add = createOptimalEvents(assignment_list, user.profile.productive_time)
+    assignment_list = user.assignment_set.filter(scheduled=False).filter(deadline__gte=date.today()).filter(deadline__lte=date.today()+timedelta(days=14)).order_by('deadline')
+    if len(assignment_list) > 0:
+        for assignment in assignment_list:
+            assignment.scheduled = True
+    tzinfo = timezone(user.profile.timezone)
+    events_to_add = createOptimalEvents(assignment_list, user.profile.productive_time, tzinfo)
     event_schedule = greedyAlgo(avalible_times, events_to_add)
     event_dict_list = []
     for event in event_schedule:
         event_dict = event.createDict()
         event_dict_list.append(event_dict)
     context = {'eventList': event_dict_list}
+    #x = foo
 
 
     return render(request, 'scheduler/create_schedule.html', context)

@@ -1,5 +1,4 @@
 import copy
-from googleapiclient.discovery import build
 from scheduler.modules.FindAvailableTime import findAvailableTime
 from scheduler.modules.OptimalEvent import OptimalEvent
 from scheduler.modules.Event import Event

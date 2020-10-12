@@ -5,7 +5,7 @@ from datetime import datetime, timedelta, time, date, timezone
 def myround(x, base=0.25):
     return base * round(x/base)
 
-def createOptimalEvents(assignment_list, productive_time):
+def createOptimalEvents(assignment_list, productive_time, tzoffset):
     if productive_time == 'EB':
         personal_optimal_time = time(6, 30)
     elif productive_time == 'MM':
@@ -25,14 +25,13 @@ def createOptimalEvents(assignment_list, productive_time):
 
     optimal_event_list = []
     for assignment in assignment_list:
-        tzoffset = assignment.deadline.tzinfo
         if assignment.assignment_type == 'HW':
             if  assignment.time_to_complete_estimate < 1:
                 duration = 1
             else:
                 duration = assignment.time_to_complete_estimate
-            start_time = datetime.combine(assignment.deadline - timedelta(days=3), personal_optimal_time, tzinfo=tzoffset) - timedelta(hours=(duration/2.0))
-            end_time = datetime.combine(assignment.deadline - timedelta(days=3), personal_optimal_time, tzinfo=tzoffset) + timedelta(hours=(duration/2.0))
+            start_time = datetime.combine(assignment.deadline.date() - timedelta(days=3), personal_optimal_time, tzinfo=tzoffset) - timedelta(hours=(duration/2.0))
+            end_time = datetime.combine(assignment.deadline.date() - timedelta(days=3), personal_optimal_time, tzinfo=tzoffset) + timedelta(hours=(duration/2.0))
             optimal_event = OptimalEvent(start_time, end_time, assignment.deadline, 'HW', assignment.assignment_name)
             optimal_event_list.append(optimal_event)
         elif assignment.assignment_type == 'QZ':
@@ -40,8 +39,8 @@ def createOptimalEvents(assignment_list, productive_time):
                 duration = 1
             else:
                 duration = assignment.time_to_complete_estimate
-            start_time = datetime.combine(assignment.deadline - timedelta(days=1), personal_optimal_time, tzinfo=tzoffset) - timedelta(hours=(duration/2.0))
-            end_time = datetime.combine(assignment.deadline - timedelta(days=1), personal_optimal_time, tzinfo=tzoffset) + timedelta(hours=(duration/2.0))
+            start_time = datetime.combine(assignment.deadline.date() - timedelta(days=1), personal_optimal_time, tzinfo=tzoffset) - timedelta(hours=(duration/2.0))
+            end_time = datetime.combine(assignment.deadline.date() - timedelta(days=1), personal_optimal_time, tzinfo=tzoffset) + timedelta(hours=(duration/2.0))
             optimal_event = OptimalEvent(start_time, end_time, assignment.deadline, 'QZ', assignment.assignment_name)
             optimal_event_list.append(optimal_event)
         elif assignment.assignment_type == 'EX':
@@ -49,16 +48,16 @@ def createOptimalEvents(assignment_list, productive_time):
                 duration = 1
             else:
                 duration = myround(assignment.time_to_complete_estimate/3)
-            start_time = datetime.combine(assignment.deadline - timedelta(days=4), personal_optimal_time, tzinfo=tzoffset) - timedelta(hours=(duration/2.0))
-            end_time = datetime.combine(assignment.deadline - timedelta(days=4), personal_optimal_time, tzinfo=tzoffset) + timedelta(hours=(duration/2.0))
+            start_time = datetime.combine(assignment.deadline.date() - timedelta(days=4), personal_optimal_time, tzinfo=tzoffset) - timedelta(hours=(duration/2.0))
+            end_time = datetime.combine(assignment.deadline.date() - timedelta(days=4), personal_optimal_time, tzinfo=tzoffset) + timedelta(hours=(duration/2.0))
             optimal_event = OptimalEvent(start_time, end_time, assignment.deadline, 'EX', assignment.assignment_name)
             optimal_event_list.append(optimal_event)
-            start_time = datetime.combine(assignment.deadline - timedelta(days=3), personal_optimal_time, tzinfo=tzoffset) - timedelta(hours=(duration/2.0))
-            end_time = datetime.combine(assignment.deadline - timedelta(days=3), personal_optimal_time, tzinfo=tzoffset) + timedelta(hours=(duration/2.0))
+            start_time = datetime.combine(assignment.deadline.date() - timedelta(days=3), personal_optimal_time, tzinfo=tzoffset) - timedelta(hours=(duration/2.0))
+            end_time = datetime.combine(assignment.deadline.date() - timedelta(days=3), personal_optimal_time, tzinfo=tzoffset) + timedelta(hours=(duration/2.0))
             optimal_event = OptimalEvent(start_time, end_time, assignment.deadline, 'EX', assignment.assignment_name)
             optimal_event_list.append(optimal_event)
-            start_time = datetime.combine(assignment.deadline - timedelta(days=1), personal_optimal_time, tzinfo=tzoffset) - timedelta(hours=(duration/2.0))
-            end_time = datetime.combine(assignment.deadline - timedelta(days=1), personal_optimal_time, tzinfo=tzoffset) + timedelta(hours=(duration/2.0))
+            start_time = datetime.combine(assignment.deadline.date() - timedelta(days=1), personal_optimal_time, tzinfo=tzoffset) - timedelta(hours=(duration/2.0))
+            end_time = datetime.combine(assignment.deadline.date() - timedelta(days=1), personal_optimal_time, tzinfo=tzoffset) + timedelta(hours=(duration/2.0))
             optimal_event = OptimalEvent(start_time, end_time, assignment.deadline, 'EX', assignment.assignment_name)
             optimal_event_list.append(optimal_event)
     optimal_event_list.sort(reverse=True)

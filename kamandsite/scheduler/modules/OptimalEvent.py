@@ -17,6 +17,8 @@ class OptimalEvent:
         if not (self.timeslots[-1][1] == endTime):
             raise ValueError("Duration must be multiple of 15 minutes")
 
+    def __repr__(self):
+        return "{}:{} to {}".format(self.id, self.startTime, self.endTime)
 
     #need to define > = < etc.
     def __eq__(self, other):
