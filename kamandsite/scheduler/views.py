@@ -185,6 +185,7 @@ def create_schedule(request):
     if len(assignment_list) > 0:
         for assignment in assignment_list:
             assignment.scheduled = True
+            assignment.save()
     tzinfo = timezone(user.profile.timezone)
     events_to_add = createOptimalEvents(assignment_list, user.profile.productive_time, tzinfo)
     event_schedule = greedyAlgo(avalible_times, events_to_add)
