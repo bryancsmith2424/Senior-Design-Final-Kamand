@@ -23,24 +23,67 @@ class Event:
 
 
     def createDict(self):
-        eventDict = {
-         'summary': '{}'.format(self.id),
-         'description': '',
-         'start': {
-           'dateTime': self.startTime.isoformat(),
-           'timeZone': self.startTime.tzname(),
-         },
-         'end': {
-           'dateTime': self.endTime.isoformat(),
-           'timeZone': self.endTime.tzname(),
-         },
-         'reminders': {
-           'useDefault': False,
-           'overrides': [
-              {'method': 'popup', 'minutes': 15},
-           ],
-         },
-        }
+        if self.type == "HW":
+            eventDict = {
+             'summary': '{}'.format(self.id),
+             'description': '',
+             'start': {
+               'dateTime': self.startTime.isoformat(),
+               'timeZone': self.startTime.tzname(),
+             },
+             'end': {
+               'dateTime': self.endTime.isoformat(),
+               'timeZone': self.endTime.tzname(),
+             },
+             'reminders': {
+               'useDefault': True,
+             },
+            }
+        elif self.type == "QZ":
+            eventDict = {
+             'summary': '{}'.format(self.id),
+             'description': '',
+             'start': {
+               'dateTime': self.startTime.isoformat(),
+               'timeZone': self.startTime.tzname(),
+             },
+             'end': {
+               'dateTime': self.endTime.isoformat(),
+               'timeZone': self.endTime.tzname(),
+             },
+             'reminders': {
+               'useDefault': True,
+             },
+            }
+        elif self.type == "EX":
+            eventDict = {
+             'summary': '{}'.format(self.id),
+             'description': '',
+             'start': {
+               'dateTime': self.startTime.isoformat(),
+               'timeZone': self.startTime.tzname(),
+             },
+             'end': {
+               'dateTime': self.endTime.isoformat(),
+               'timeZone': self.endTime.tzname(),
+             },
+            }
+        else:
+            eventDict = {
+             'summary': '{}'.format(self.id),
+             'description': '',
+             'start': {
+               'dateTime': self.startTime.isoformat(),
+               'timeZone': self.startTime.tzname(),
+             },
+             'end': {
+               'dateTime': self.endTime.isoformat(),
+               'timeZone': self.endTime.tzname(),
+             },
+             'reminders': {
+               'useDefault': True,
+             },
+            }
         return eventDict
 
     def addToGoogleCalander(self, service, calendarID):

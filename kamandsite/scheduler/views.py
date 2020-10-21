@@ -117,7 +117,7 @@ def delete_courses(request):
             user.course_set.filter(id=course_id).delete()
         except(KeyError):
             pass
-    return HttpResponseRedirect(reverse('scheduler/start'))
+    return HttpResponseRedirect(reverse('profile'))
 
 @login_required(login_url='/scheduler/')
 def edit_assignments(request):
@@ -135,7 +135,7 @@ def delete_assignments(request):
             user.assignment_set.filter(id=assignment_id).delete()
         except(KeyError):
             pass
-    return HttpResponseRedirect(reverse('scheduler/start'))
+    return HttpResponseRedirect(reverse('profile'))
 
 
 @login_required(login_url='/scheduler/')
@@ -181,7 +181,7 @@ def create_schedule(request):
             event_dict = event.createDict()
             event_dict_list['items'].append(event_dict)
     avalible_times = findAvailableTime(event_dict_list, date.today() + timedelta(days = 1), date.today() + timedelta(days = 15), user.profile.day_start_offset, user.profile.day_end_offset, -4)
-    assignment_list = user.assignment_set.filter(scheduled=False).filter(deadline__gte=date.today()).filter(deadline__lte=date.today()+timedelta(days=14)).order_by('deadline')
+    assignment_list = user.assignment_set.filter(deadline__gte=date.today()).filter(deadline__lte=date.today()+timedelta(days=14)).filter(scheduled=False).order_by('deadline')
     if len(assignment_list) > 0:
         for assignment in assignment_list:
             assignment.scheduled = True

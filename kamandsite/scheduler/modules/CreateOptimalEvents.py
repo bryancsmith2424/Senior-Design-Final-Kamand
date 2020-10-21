@@ -60,5 +60,5 @@ def createOptimalEvents(assignment_list, productive_time, tzoffset):
             end_time = datetime.combine(assignment.deadline.date() - timedelta(days=1), personal_optimal_time, tzinfo=tzoffset) + timedelta(hours=(duration/2.0))
             optimal_event = OptimalEvent(start_time, end_time, assignment.deadline, 'EX', assignment.assignment_name)
             optimal_event_list.append(optimal_event)
-    optimal_event_list.sort(reverse=True)
+    optimal_event_list.sort()
     return optimal_event_list

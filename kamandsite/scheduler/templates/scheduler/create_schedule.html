@@ -110,7 +110,7 @@
         if (isSignedIn) {
           authorizeButton.style.display = 'none';
           signoutButton.style.display = 'block';
-          insertEvents();
+          document.addEventListener("DOMContentLoaded",   insertEvents());
 
         } else {
           authorizeButton.style.display = 'block';
