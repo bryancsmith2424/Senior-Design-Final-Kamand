@@ -19,7 +19,7 @@ def createOptimalEvents(assignment_list, productive_time, tzoffset):
     elif productive_time == 'NO':
         personal_optimal_time = time(21, 0)
     elif productive_time == 'NN':
-        personal_optimal_time = time(0, 30)
+        personal_optimal_time = time(23, 30)
     else:
         return "ERROR"
 

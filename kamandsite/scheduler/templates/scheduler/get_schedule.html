@@ -9,9 +9,20 @@
     <meta charset="utf-8" />
   </head>
   <body>
-    <p>Google Calendar API Quickstart</p>
+    <a href="{% url 'scheduler' %}"><button type="button" style="position: absolute;right: 250px;top: 15px;
+    background-color: #DC143C;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    font-family: Oswald;
+    margin: 4px 2px;
+    cursor: pointer;"> Home </button></a>
     {% if user.is_authenticated %}
-    <a href="#" onClick="document.getElementById('logoutform').submit()"><button type="button" style="position: absolute;left: 100px;top: 50px;
+    <a href="#" onClick="document.getElementById('logoutform').submit()"><button type="button" style="position: absolute;right: 100px;top: 15px;
     background-color: #DDA0DD;
     border: none;
     color: white;
@@ -20,6 +31,7 @@
     text-decoration: none;
     display: inline-block;
     font-size: 20px;
+    font-family: Oswald;
     margin: 4px 2px;
     cursor: pointer;">Logout</button></a>
     <form id="logoutform" method="POST" action="{% url 'logout' %}">
@@ -27,7 +39,7 @@
     <input type="hidden">
     </form>
     {% endif %}
-
+    <strong>Use this button to authoirize our access to your google calander. Click sign out to take that access away</strong>
     <!--Add buttons to initiate auth sequence and sign out-->
     <button id="authorize_button" style="display: none;">Authorize</button>
     <button id="signout_button" style="display: none;">Sign Out</button>

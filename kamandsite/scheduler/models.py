@@ -30,7 +30,7 @@ class Profile(models.Model):
         (Afternoon_Albatross, 'Afternoon_Albatross: 2pm - 5pm'),
         (Evening_Eagle, 'Evening_Eagle: 5pm - 8pm'),
         (Night_Owl, 'Night Owl: 8pm - 10pm'),
-        (Nocturnal_Nightingale, 'Nocturnal_Nightingale: 11pm - 2am'),
+        (Nocturnal_Nightingale, 'Nocturnal_Nightingale: 10pm - 1am'),
     ]
     productive_time = models.CharField(
         max_length=2,

@@ -3,7 +3,7 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'scheduler/style.css' %}">
 <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
-<h1>Please tell us what assignments you have coming up so we can build your schedule </h1>
+<h1 style="position: relative;left: 50px;text-align: center;">Please tell us what assignments you have coming up so we can build your schedule </h1>
 
 <form action="{% url 'update_assignments' %}" method="post">
 {% csrf_token %}
@@ -39,6 +39,19 @@
 <input type="submit" value="Submit">
 </form>
 
+<a href="{% url 'scheduler' %}"><button type="button" style="position: absolute;left: 25px;top: 50px;
+background-color: #DC143C;
+border: none;
+color: white;
+padding: 15px 32px;
+text-align: center;
+text-decoration: none;
+display: inline-block;
+font-size: 20px;
+font-family: Oswald;
+margin: 4px 2px;
+cursor: pointer;"> Home </button></a>
+
 {% if user.is_authenticated %}
 <a href="#" onClick="document.getElementById('logoutform').submit()"><button type="button" style="position: absolute;left: 25px;top: 125px;
 background-color: #DDA0DD;
@@ -49,6 +62,7 @@ text-align: center;
 text-decoration: none;
 display: inline-block;
 font-size: 20px;
+font-family: Oswald;
 margin: 4px 2px;
 cursor: pointer;">Logout</button></a>
 <form id="logoutform" method="POST" action="{% url 'logout' %}">
