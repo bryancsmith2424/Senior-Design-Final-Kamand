@@ -16,28 +16,29 @@ def findAvailableTime(events, startDate, endDate, dayStartOffset, dayEndOffset, 
     end = datetime.combine(endDate, time(22,0,0), timezone(timedelta(hours = timeZoneOffset)) ) + timedelta(hours = dayEndOffset)
     endTime = time(22 + dayEndOffset,0,0,0, timezone(timedelta(hours = timeZoneOffset)))
     currTime = start
-    firstEventStart = roundStartTo15(datetime.fromisoformat(events['items'][0]['start']['dateTime'])) - timedelta(minutes = 15)
+    if len(events['items']) > 0:
+        firstEventStart = roundStartTo15(datetime.fromisoformat(events['items'][0]['start']['dateTime'])) - timedelta(minutes = 15)
 
-    #find all the avalible time slots befor the first event
-    while True:
-        if firstEventStart < currTime + timedelta(minutes = 15):
-            break
-        else:
-            if (currTime.timetz() >= startTime) and ((currTime + timedelta(minutes = 15)).timetz() <= endTime):
-                availableTimes.append((currTime, currTime + timedelta(minutes = 15)))
-            currTime = currTime + timedelta(minutes = 15)
-    #print("Got to first event")
-    for i, event in enumerate(events['items']):
-        currEventStart = roundStartTo15(datetime.fromisoformat(events['items'][i]['start']['dateTime'])) - timedelta(minutes = 15)
-        if i == 0:
-            currTime = roundEndTo15(datetime.fromisoformat(events['items'][0]['end']['dateTime'])) + timedelta(minutes = 15)
-            continue
-        while (currTime + timedelta(minutes = 15) <= currEventStart):
-            if (currTime.timetz() >= startTime) and ((currTime + timedelta(minutes = 15)).timetz() <= endTime) and (currTime.date() == (currTime + timedelta(minutes = 15)).date()):
-                availableTimes.append((currTime, currTime + timedelta(minutes = 15)))
-            currTime = currTime + timedelta(minutes = 15)
-        if (currTime < roundEndTo15(datetime.fromisoformat(events['items'][i]['end']['dateTime'])) + timedelta(minutes = 15)):
-            currTime =  roundEndTo15(datetime.fromisoformat(events['items'][i]['end']['dateTime'])) + timedelta(minutes = 15)
+        #find all the avalible time slots befor the first event
+        while True:
+            if firstEventStart < currTime + timedelta(minutes = 15):
+                break
+            else:
+                if (currTime.timetz() >= startTime) and ((currTime + timedelta(minutes = 15)).timetz() <= endTime):
+                    availableTimes.append((currTime, currTime + timedelta(minutes = 15)))
+                currTime = currTime + timedelta(minutes = 15)
+        #print("Got to first event")
+        for i, event in enumerate(events['items']):
+            currEventStart = roundStartTo15(datetime.fromisoformat(events['items'][i]['start']['dateTime'])) - timedelta(minutes = 15)
+            if i == 0:
+                currTime = roundEndTo15(datetime.fromisoformat(events['items'][0]['end']['dateTime'])) + timedelta(minutes = 15)
+                continue
+            while (currTime + timedelta(minutes = 15) <= currEventStart):
+                if (currTime.timetz() >= startTime) and ((currTime + timedelta(minutes = 15)).timetz() <= endTime) and (currTime.date() == (currTime + timedelta(minutes = 15)).date()):
+                    availableTimes.append((currTime, currTime + timedelta(minutes = 15)))
+                currTime = currTime + timedelta(minutes = 15)
+            if (currTime < roundEndTo15(datetime.fromisoformat(events['items'][i]['end']['dateTime'])) + timedelta(minutes = 15)):
+                currTime =  roundEndTo15(datetime.fromisoformat(events['items'][i]['end']['dateTime'])) + timedelta(minutes = 15)
 
     #print("Got passed all events")
     while (currTime + timedelta(minutes = 15) <= end):

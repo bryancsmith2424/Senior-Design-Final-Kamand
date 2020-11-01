@@ -1,13 +1,14 @@
 from datetime import datetime, timedelta, time, timezone
 
 class OptimalEvent:
-    def __init__(self, startTime, endTime, deadline, type, id, **kwargs):
+    def __init__(self, startTime, endTime, deadline, type, id, course, **kwargs):
         self.startTime = startTime
         self.endTime = endTime
         self.timeslotsOccupied = (endTime - startTime)//timedelta(minutes = 15)
         self.deadline = deadline
         self.type = type
         self.id = id
+        self.course = course
 
         self.timeslots = []
         currTime = startTime

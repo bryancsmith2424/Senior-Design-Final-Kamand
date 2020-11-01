@@ -1,11 +1,12 @@
 from datetime import datetime
 
 class Event:
-    def __init__(self, startTime, endTime, type, id, dict = {}, **kwargs):
+    def __init__(self, startTime, endTime, type, id, course, dict = {}, **kwargs):
         self.startTime = startTime
         self.endTime = endTime
         self.type = type
         self.id = id
+        self.course = course
         self.dict = dict
 
 

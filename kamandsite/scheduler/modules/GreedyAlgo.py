@@ -50,7 +50,7 @@ def greedyAlgo(availableTimes, eventsToAdd):
         if feasiblityCheck:
             scheduledFirstTimeslotIndex = availableTimes.index(bestTimeSlot)
             scheduledTimeslotsTaken = availableTimes[scheduledFirstTimeslotIndex : scheduledFirstTimeslotIndex + eventsToAdd[i].timeslotsOccupied]
-            eventSchedule.append(Event(scheduledTimeslotsTaken[0][0], scheduledTimeslotsTaken[-1][1], eventsToAdd[i].type, eventsToAdd[i].id))
+            eventSchedule.append(Event(scheduledTimeslotsTaken[0][0], scheduledTimeslotsTaken[-1][1], eventsToAdd[i].type, eventsToAdd[i].id, eventsToAdd[i].course))
             for slot in scheduledTimeslotsTaken:
                 availableTimes.remove(slot)
             i += 1

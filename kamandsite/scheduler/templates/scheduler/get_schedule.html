@@ -42,13 +42,14 @@
     <strong>Use this button to authoirize our access to your google calander. Click sign out to take that access away</strong>
     <!--Add buttons to initiate auth sequence and sign out-->
     <button id="authorize_button" style="display: none;">Authorize</button>
-    <button id="signout_button" style="display: none;">Sign Out</button>
+    <button id="signout_button" style="display: none;">Unauthorize</button>
 
     <pre id="content" style="white-space: pre-wrap;"></pre>
 
     <form action="{% url 'create_schedule' %}" method="post">
     {% csrf_token %}
-    <b>Please wait until your data is imported from google, then hit submit</b><br>
+    <b>Please wait until your data is imported from google (if you have any events in your calander atleast one textbox should be filled with data)</b><br>
+    <b>Once you data is imported, hit submit for us to add events to your calendar</b><br>
     <input type="submit" value="Submit"><hr>
     {% for i in range %}
       <label for="event{{i}}">Event {{forloop.counter}}:</label>
@@ -117,7 +118,7 @@
           signoutButton.style.display = 'block';
           window.addEventListener("DOMContentLoaded", getUpcomingEvents());
           //getUpcomingEvents();
-          listUpcomingEvents();
+          //listUpcomingEvents();
 
         } else {
           authorizeButton.style.display = 'block';

@@ -3,12 +3,22 @@
 <link rel="stylesheet" type="text/css" href="{% static 'scheduler/style.css' %}">
 <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
 
+<script type="text/javascript">
+  function validateForm() {
+  var start = new Date("October 24, 2020 ".concat(document.forms["myForm"]["start_time"].value));
+  var end = new Date("October 24, 2020 ".concat(document.forms["myForm"]["end_time"].value));
+  if (start >= end) {
+    alert("Earliest time must be before latest time");
+    return false;
+  }
+}
+</script>
 <h2>These questions will help us tailor our scheduleing algorithim to you:</h2>
 <br>
 <br>
 <p>What classes are you taking this semester?</p>
 
-<form action="{% url 'update_goals' %}" method="post">
+<form name="myForm" action="{% url 'update_goals' %}" method="post" onsubmit="return validateForm()">
 {% csrf_token %}
 
 {% for i in '1234567'|make_list %}
@@ -17,26 +27,26 @@
 {% endfor %}
 <br>
 <label for="start_time">When is the earliest we should schedule something for you?</label>
-<input type="time" name="start_time" id="start_time" min="00:15" max="19:00" step=900 required><br>
+<input type="time" name="start_time" id="start_time" required><br>
 
 <label for="end_time">When is the latest we should schedule something for you?</label>
-<input type="time" name="end_time" id="end_time" min="07:00" max="23:45" step=900 required><br>
+<input type="time" name="end_time" id="end_time" required><br>
 
 <p>When do you think you are most productive?</p>
 <input type="radio" id="EB" name="productive_time" value="EB" required>
 <label for="EB">5am - 8am <em>Early Bird</em></label>
 <input type="radio" id="MM" name="productive_time" value="MM" required>
-<label for="MM">8am - 11am <em>Morning Magpie</em></label>
+<label for="MM">8am - 11am </label>
 <input type="radio" id="MD" name="productive_time" value="MD" required>
-<label for="MD">11am - 2pm <em>Mid-Day Macaw</em></label>
+<label for="MD">11am - 2pm </label>
 <input type="radio" id="AA" name="productive_time" value="AA" required>
-<label for="AA">2pm - 5pm <em>Afternoon Albatross</em></label>
+<label for="AA">2pm - 5pm </label>
 <input type="radio" id="EE" name="productive_time" value="EE" required>
-<label for="EE">5pm - 8pm <em>Evening Eagle</em></label>
+<label for="EE">5pm - 8pm </label>
 <input type="radio" id="NO" name="productive_time" value="NO" required>
-<label for="NO">8pm - 10pm <em>Night Owl</em></label>
+<label for="NO">8pm - 10pm</label>
 <input type="radio" id="NN" name="productive_time" value="NN" required>
-<label for="NN">10pm - 1am <em>Nocturnal Nightingale</em></label><br>
+<label for="NN">10pm - 12am <em>Night Owl</em> </label><br>
 
 <br>
 <input type="submit" value="Submit">

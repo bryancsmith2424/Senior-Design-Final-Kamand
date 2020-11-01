@@ -30,7 +30,7 @@ class Profile(models.Model):
         (Afternoon_Albatross, 'Afternoon_Albatross: 2pm - 5pm'),
         (Evening_Eagle, 'Evening_Eagle: 5pm - 8pm'),
         (Night_Owl, 'Night Owl: 8pm - 10pm'),
-        (Nocturnal_Nightingale, 'Nocturnal_Nightingale: 10pm - 1am'),
+        (Nocturnal_Nightingale, 'Nocturnal_Nightingale: 10pm - 12pm'),
     ]
     productive_time = models.CharField(
         max_length=2,
@@ -69,6 +69,26 @@ class Assignment(models.Model):
     time_to_complete_estimate = models.FloatField(default = 1.0)
     scheduled = models.BooleanField(default=False)
 
+class Scheduled_event(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+
+    Homework = 'HW'
+    Quiz = 'QZ'
+    Exam = 'EX'
+    Type_Choices = [
+        (Homework, 'Homework'),
+        (Quiz, 'Quiz'),
+        (Exam, 'Exam'),
+    ]
+    type = models.CharField(
+        max_length=2,
+        choices=Type_Choices,
+        default=Homework,
+    )
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    event_name = models.CharField(max_length=50, blank=True)
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):

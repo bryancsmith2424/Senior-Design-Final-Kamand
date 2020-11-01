@@ -11,12 +11,12 @@ from datetime import timedelta, datetime, time, date, tzinfo
 
 from pytz import timezone
 
-from .models import Profile, Course, Assignment
+from .models import Profile, Course, Assignment, Scheduled_event
 
 from scheduler.modules.GreedyAlgo import greedyAlgo
 from scheduler.modules.OptimalEvent import OptimalEvent
 from scheduler.modules.Event import Event
-from scheduler.modules.FindAvailableTime import findAvailableTime
+from scheduler.modules.FindAvailableTime import findAvailableTime, roundEndTo15, roundStartTo15
 from scheduler.modules.CreateOptimalEvents import createOptimalEvents
 
 def index(request):
@@ -44,15 +44,15 @@ def update_goals(request):
     user = request.user
     try:
         class_name_list = request.POST.getlist('class')
-        start_time = time.fromisoformat(request.POST.get('start_time'))
-        end_time = time.fromisoformat(request.POST.get('end_time'))
+        start_time = roundStartTo15(datetime.combine(date.today(), time.fromisoformat(request.POST.get('start_time')))).time()
+        end_time = roundEndTo15(datetime.combine(date.today(), time.fromisoformat(request.POST.get('end_time')))).time()
         productive_time = request.POST.get('productive_time')
     except(KeyError):
         return render(request, 'scheduler/error.html')
     else:
         user.profile.productive_time = productive_time
         user.profile.day_start_offset = int(start_time.hour - 9) + 1
-        user.profile.day_end_offset = int(end_time.hour - 22)
+        user.profile.day_end_offset = int(end_time.hour - 22) - 1
         user.save()
         for course in class_name_list:
             if course != '':
@@ -62,8 +62,13 @@ def update_goals(request):
         return HttpResponseRedirect(reverse('scheduler'))
 
 @login_required(login_url='/scheduler/')
+def assignments_number(request):
+    return render(request, 'scheduler/assignments_number.html')
+
+@login_required(login_url='/scheduler/')
 def assignments(request):
-    context = {'course_name_list': request.user.course_set.all(), 'course_name_count': request.user.course_set.count()}
+    assignments_number = request.POST.get("assignments_number")
+    context = {'range': range(int(assignments_number)), 'course_name_list': request.user.course_set.all(), 'course_name_count': request.user.course_set.count()}
     return render(request, 'scheduler/assignments.html', context)
 
 @login_required(login_url='/scheduler/')
@@ -71,8 +76,8 @@ def update_assignments(request):
     user = request.user
 
     form_dict = request.POST
-
-    for i in range(1, 10):
+    i = 0
+    while True:
         try:
             course = form_dict.get("course{}".format(i))
             type = form_dict.get("type{}".format(i))
@@ -80,13 +85,15 @@ def update_assignments(request):
             deadline = form_dict.get("deadline{}".format(i))
             duration = form_dict.get("duration{}".format(i))
 
-            if (name == '') or (deadline == '') or (duration == ''):
-                pass
+            if (name == None) or (deadline == None) or (duration == None):
+                break
             else:
+                i = i + 1
                 user_timezone = timezone(user.profile.timezone)
-                deadline = user_timezone.localize(datetime.fromisoformat(deadline))
+                deadline = user_timezone.localize(roundStartTo15(datetime.fromisoformat(deadline)))
                 duration = float(duration)
                 Assignment.objects.create(user=user, course=Course.objects.get(pk=course), assignment_type=type, assignment_name=name, deadline=deadline, time_to_complete_estimate=duration)
+
         except(KeyError):
             pass
     return HttpResponseRedirect(reverse('scheduler'))
@@ -177,7 +184,7 @@ def create_schedule(request):
         if (len(form_dict.get('event_start{}'.format(i))) > 1):
             event_start = datetime.fromisoformat(form_dict.get('event_start{}'.format(i)))
             event_end = datetime.fromisoformat(form_dict.get('event_end{}'.format(i)))
-            event = Event(event_start, event_end, "N/A", "N/A")
+            event = Event(event_start, event_end, "N/A", "N/A", 0)
             event_dict = event.createDict()
             event_dict_list['items'].append(event_dict)
     avalible_times = findAvailableTime(event_dict_list, date.today() + timedelta(days = 1), date.today() + timedelta(days = 15), user.profile.day_start_offset, user.profile.day_end_offset, -4)
@@ -191,6 +198,7 @@ def create_schedule(request):
     event_schedule = greedyAlgo(avalible_times, events_to_add)
     event_dict_list = []
     for event in event_schedule:
+        Scheduled_event.objects.create(user=user, course=Course.objects.get(pk=event.course), start_time=event.startTime, end_time=event.endTime, type=event.type, event_name=event.id)
         event_dict = event.createDict()
         event_dict_list.append(event_dict)
     context = {'eventList': event_dict_list}

@@ -3,12 +3,14 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'scheduler/style.css' %}">
 <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
-<h1 style="position: relative;left: 50px;text-align: center;">Please tell us what assignments you have coming up so we can build your schedule </h1>
-
+<h2 style="position: relative;left: 50px;text-align: center;">Please tell us what assignments you have coming up so we can build your schedule </h2>
+<br>
+<br>
+<br>
 <form action="{% url 'update_assignments' %}" method="post">
 {% csrf_token %}
 
-{% for i in '123456789'|make_list %}
+{% for i in range %}
   <p>
   <p>Assignment {{forloop.counter}}:</p>
   <label for="course{{ i }}">What class is this for?:</label>
@@ -25,14 +27,14 @@
     <option value="EX">Exam</option>
   </select><br>
 
-  <label for="name{{ i }}">Assignment Name: </label>
-  <input type="text" name="name{{ i }}" id="name{{ i }}"><br>
+  <label for="name{{ i }}">Event title for your google calander:</label>
+  <input type="text" name="name{{ i }}" id="name{{ i }}" required><br>
 
   <label for="deadline{{ i }}">When is it due?: </label>
-  <input type="datetime-local" name="deadline{{ i }}" id="deadline{{ i }}" step=900><br>
+  <input type="datetime-local" name="deadline{{ i }}" id="deadline{{ i }}" required><br>
 
   <label for="duration{{ i }}">About how many hours do you expect to need to complete/study for this assignment? </label>
-  <input type="number" name="duration{{ i }}" id="duration{{ i }}" step=0.25 min=0><br>
+  <input type="number" name="duration{{ i }}" id="duration{{ i }}" step=0.25 min=0 required><br>
   </p>
 {% endfor %}
 
