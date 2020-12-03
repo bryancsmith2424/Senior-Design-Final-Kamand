@@ -39,7 +39,9 @@
     <input type="hidden">
     </form>
     {% endif %}
-    <strong>Use this button to authoirize our access to your google calander. Click sign out to take that access away</strong>
+    <strong>Use this button to authoirize our access to your google calander. Click sign out to take that access away</strong><br>
+    <em>Your first time you will get an error message that the link is not safe, which you can get past be hitting advanced and then proceed anyway.</em><a href="https://developers.google.com/apps-script/guides/client-verification" style="font-size:12px">Click here for more info about this warning</a>
+
     <!--Add buttons to initiate auth sequence and sign out-->
     <button id="authorize_button" style="display: none;">Authorize</button>
     <button id="signout_button" style="display: none;">Unauthorize</button>

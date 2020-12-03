@@ -96,7 +96,7 @@ def update_assignments(request):
 
         except(KeyError):
             pass
-    return HttpResponseRedirect(reverse('scheduler'))
+    return HttpResponseRedirect(reverse('importcalander'))
 
 @login_required(login_url='/scheduler/')
 def profile(request):
@@ -187,8 +187,8 @@ def create_schedule(request):
             event = Event(event_start, event_end, "N/A", "N/A", 0)
             event_dict = event.createDict()
             event_dict_list['items'].append(event_dict)
-    avalible_times = findAvailableTime(event_dict_list, date.today() + timedelta(days = 1), date.today() + timedelta(days = 15), user.profile.day_start_offset, user.profile.day_end_offset, -4)
-    assignment_list = user.assignment_set.filter(deadline__gte=date.today()).filter(deadline__lte=date.today()+timedelta(days=14)).filter(scheduled=False).order_by('deadline')
+    avalible_times = findAvailableTime(event_dict_list, date.today() + timedelta(days = 1), date.today() + timedelta(days = 29), user.profile.day_start_offset, user.profile.day_end_offset, -4)
+    assignment_list = user.assignment_set.filter(deadline__gte=date.today()).filter(deadline__lte=date.today()+timedelta(days=28)).filter(scheduled=False).order_by('deadline')
     if len(assignment_list) > 0:
         for assignment in assignment_list:
             assignment.scheduled = True

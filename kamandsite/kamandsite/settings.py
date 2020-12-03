@@ -20,12 +20,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'w#f0fvt6!6e%qh01--u80m(26$=(g+ul=6&900@@*%k-wmw_^3'
+SECRET_KEY = 'B2x.:xI7;^c-!0"opf87,FYn^=qdd&_5cj$U56<%@Fm^+/9,Td'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+SESSION_COOKIE_SECURE = True
+
+ALLOWED_HOSTS = ['bryancsmith2424.pythonanywhere.com', 'www.kamand.app',]
 
 
 # Application definition
@@ -133,6 +135,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 SITE_ID = 1 # from https://medium.com/@whizzoe/in-5-mins-set-up-google-login-to-sign-up-users-on-django-e71d5c38f5d5
 LOGIN_REDIRECT_URL = '/' # from https://medium.com/@whizzoe/in-5-mins-set-up-google-login-to-sign-up-users-on-django-e71d5c38f5d5

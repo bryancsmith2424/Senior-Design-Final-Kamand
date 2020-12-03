@@ -6,7 +6,7 @@
 <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
 <html>
   <head>
-    <title>Google Registration</title>
+    <title>Kamand</title>
   </head>
   <body>
     <div class="center">
@@ -44,8 +44,15 @@
 
   <h2>Welcome, {{ user.first_name }} !</h2>
   <a href="{% url 'goals' %}">First time? Click here to give us some info about your semester!</a><br>
-  <a href="{% url 'start' %}">Returning? Click here</a><br>
+  <a href="{% url 'assignments' %}">Schedule assignments</a><br>
+  <hr>
   <a href="{% url 'profile' %}"> View Profile </a>
+  <hr>
+  <a href="https://docs.google.com/forms/d/e/1FAIpQLScJgbtqGb-xADC9A0E06cA5Jdh2Aeuds7WOj8TlTbm0SysWgA/viewform?usp=sf_link
+">Please fill out our feedback form!</a>
+  <hr>
+  <a href="https://docs.google.com/forms/d/e/1FAIpQLSd7C258OhcHQp-yEX3pOHfDtec5dC5h2JUEC_bdy4oF2eY4OA/viewform?usp=sf_link
+">Experience any errors? Click here to let us know</a>
 
   {% else %}
   <a href="{% provider_login_url 'google' %}">Login with Google</a>
